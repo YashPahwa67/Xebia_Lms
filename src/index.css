@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-white text-ink font-sans;
+  }
+  ::selection {
+    @apply bg-plum text-white;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-teal ring-offset-2 ring-offset-white;
+  }
+}
+
+@layer components {
+  /* Reusable marketing utility patterns (keeps JSX class strings short). */
+  .shell {
+    @apply mx-auto w-full max-w-container px-6 lg:px-8;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-plum/15 bg-plum/[0.04]
+           px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-plum;
+  }
+  .display-1 {
+    @apply font-display font-semibold tracking-tightest text-ink
+           text-[clamp(2.6rem,6.2vw,5.25rem)] leading-[0.98];
+  }
+  .display-2 {
+    @apply font-display font-semibold tracking-tightest text-ink
+           text-[clamp(2rem,4.4vw,3.4rem)] leading-[1.04];
+  }
+  .lede {
+    @apply text-[clamp(1.05rem,1.5vw,1.25rem)] leading-relaxed text-ink/60;
+  }
+  .text-gradient {
+    @apply bg-gradient-to-br from-magenta via-plum to-plum-dark bg-clip-text text-transparent;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full text-sm font-semibold
+           transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-plum px-6 py-3 text-white hover:bg-plum-dark;
+  }
+  .btn-ghost {
+    @apply btn px-6 py-3 text-ink hover:text-plum;
+  }
+  .glass {
+    @apply border border-white/60 bg-white/70 backdrop-blur-xl;
+  }
+  .card-surface {
+    @apply rounded-3xl border border-ink/[0.07] bg-white;
+    box-shadow: 0 1px 0 0 rgba(10, 10, 11, 0.04);
+  }
+}
+
+/* Lenis smooth-scroll integration */
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
