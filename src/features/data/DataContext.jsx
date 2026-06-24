@@ -64,6 +64,11 @@ export function DataProvider({ children }) {
       teachers: () => db.users.filter((u) => u.role === 'Teacher'),
       counsellors: () => db.users.filter((u) => u.role === 'Counsellor'),
       announcements: () => [...db.announcements].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+      // Director sees every announcement; everyone else sees ones addressed to them.
+      announcementsFor: (user) =>
+        [...db.announcements]
+          .filter((a) => user.role === 'Director' || (a.userIds || []).includes(user.id))
+          .sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
     };
   }, [db]);
 
@@ -171,12 +176,25 @@ export function DataProvider({ children }) {
     return subject;
   }, []);
 
-  // Director broadcasts an announcement to a role (or everyone) -> also notifies them.
-  const broadcast = useCallback(({ audience, title, message, from }) => {
+  // Post an announcement. `audience` is resolved to recipients here, scoped to
+  // who the sender is allowed to reach. `from` = { id, name, role }.
+  const broadcast = useCallback(({ audience, audienceLabel, title, message, from }) => {
     setDb((p) => {
-      const targets = p.users.filter((u) => audience === 'All' || u.role === audience).map((u) => u.id);
-      const ann = { id: nextId('an'), audience, title, message, from, createdAt: new Date().toISOString() };
-      const notif = makeNotif(targets, 'system', title, message);
+      const byRole = (r) => p.users.filter((u) => u.role === r);
+      let recipients = [];
+      if (audience === 'All') recipients = p.users.filter((u) => u.role !== 'Director');
+      else if (audience === 'Student') recipients = byRole('Student');
+      else if (audience === 'Teacher') recipients = byRole('Teacher');
+      else if (audience === 'Counsellor') recipients = byRole('Counsellor');
+      else if (audience === 'StudentsAndTeachers') recipients = [...byRole('Student'), ...byRole('Teacher')];
+      else if (audience === 'MyStudents') {
+        const myCourses = p.subjects.filter((s) => s.teacherId === from.id).map((s) => s.id);
+        recipients = byRole('Student').filter((u) => (p.enrollments[u.id] || []).some((id) => myCourses.includes(id)));
+      }
+      const userIds = recipients.map((u) => u.id).filter((id) => id !== from.id);
+
+      const ann = { id: nextId('an'), title, message, audienceLabel, from: from.name, fromRole: from.role, userIds, createdAt: new Date().toISOString() };
+      const notif = makeNotif(userIds, 'system', title, message);
       return { ...p, announcements: [ann, ...p.announcements], notifications: [notif, ...p.notifications] };
     });
   }, []);

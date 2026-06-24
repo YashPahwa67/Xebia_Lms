@@ -8,6 +8,7 @@ import SubjectDetail from './pages/SubjectDetail';
 import Assessments from './pages/Assessments';
 import Attendance from './pages/Attendance';
 import Students from './pages/Students';
+import Announcements from '@/features/announcements/AnnouncementsPage';
 
 export default function TeacherLayout() {
   return (
@@ -20,6 +21,7 @@ export default function TeacherLayout() {
         <Route path="assessments" element={<Assessments />} />
         <Route path="attendance" element={<Attendance />} />
         <Route path="students" element={<Students />} />
+        <Route path="announcements" element={<Announcements />} />
       </Routes>
     </DashboardLayout>
   );

@@ -89,10 +89,12 @@ export const notifications = [
   { id: 'no5', userIds: ['d1'], type: 'system', title: 'Monthly report ready', meta: 'June enrolment up 12%', createdAt: '2026-06-22T08:00', readBy: [] },
 ];
 
-// Announcements broadcast by the director to a role (or everyone).
+// Announcements — `userIds` is the explicit recipient list (so each role only
+// sees what's addressed to them); `audienceLabel` is for display.
 export const announcements = [
-  { id: 'an1', title: 'Term break schedule', message: 'Classes pause 1–5 July for the mid-term break.', audience: 'All', from: 'Dr. Anita Rao', createdAt: '2026-06-20T09:00' },
-  { id: 'an2', title: 'Faculty review meeting', message: 'All trainers, please submit assessment reports by Friday.', audience: 'Teacher', from: 'Dr. Anita Rao', createdAt: '2026-06-18T11:00' },
+  { id: 'an1', title: 'Term break schedule', message: 'Classes pause 1–5 July for the mid-term break.', audienceLabel: 'Everyone', from: 'Dr. Anita Rao', fromRole: ROLES.DIRECTOR, userIds: ['c1', 't1', 't2', 't3', 's1', 's2', 's3', 's4', 's5'], createdAt: '2026-06-20T09:00' },
+  { id: 'an2', title: 'Faculty review meeting', message: 'All trainers, please submit assessment reports by Friday.', audienceLabel: 'Teachers', from: 'Dr. Anita Rao', fromRole: ROLES.DIRECTOR, userIds: ['t1', 't2', 't3'], createdAt: '2026-06-18T11:00' },
+  { id: 'an3', title: 'Fee deadline reminder', message: 'Please clear pending dues before 15 July.', audienceLabel: 'Students', from: 'Rohan Verma', fromRole: ROLES.COUNSELLOR, userIds: ['s1', 's2', 's3', 's4', 's5'], createdAt: '2026-06-21T10:00' },
 ];
 
 // Deep clone so session mutations never corrupt the seed module.

@@ -28,21 +28,23 @@ export const ACCESS = {
       { to: '/counsellor/students', label: 'Students', icon: Users },
       { to: '/counsellor/fees', label: 'Fees', icon: Wallet },
       { to: '/counsellor/attendance', label: 'Attendance', icon: CalendarCheck },
+      { to: '/counsellor/announcements', label: 'Announcements', icon: Megaphone },
     ],
-    can: ['viewAllStudents', 'manageFees', 'recordPayment', 'viewAttendanceAll'],
+    can: ['viewAllStudents', 'manageFees', 'recordPayment', 'viewAttendanceAll', 'manageAnnouncements'],
   },
 
   Teacher: {
     home: '/teacher/dashboard',
-    accent: 'teal',
+    accent: 'plum',
     nav: [
       { to: '/teacher/dashboard', label: 'Dashboard', icon: LayoutDashboard },
       { to: '/teacher/subjects', label: 'My Subjects', icon: BookOpen },
       { to: '/teacher/assessments', label: 'Assessments', icon: ClipboardList },
       { to: '/teacher/attendance', label: 'Attendance', icon: CalendarCheck },
       { to: '/teacher/students', label: 'Students', icon: Users },
+      { to: '/teacher/announcements', label: 'Announcements', icon: Megaphone },
     ],
-    can: ['manageOwnSubjects', 'uploadNotes', 'createAssessment', 'markAttendance', 'viewOwnStudents'],
+    can: ['manageOwnSubjects', 'uploadNotes', 'createAssessment', 'markAttendance', 'viewOwnStudents', 'manageAnnouncements'],
   },
 
   Student: {
@@ -50,10 +52,11 @@ export const ACCESS = {
     accent: 'plum',
     nav: [
       { to: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      { to: '/student/subjects', label: 'My Subjects', icon: BookOpen },
+      { to: '/student/subjects', label: 'My Courses', icon: BookOpen },
       { to: '/student/assessments', label: 'Assessments', icon: ClipboardList },
       { to: '/student/attendance', label: 'Attendance', icon: CalendarCheck },
       { to: '/student/fees', label: 'Fees', icon: Wallet },
+      { to: '/student/announcements', label: 'Announcements', icon: Megaphone },
     ],
     can: ['viewEnrolledSubjects', 'viewNotes', 'takeAssessment', 'viewOwnAttendance', 'viewOwnFees'],
   },

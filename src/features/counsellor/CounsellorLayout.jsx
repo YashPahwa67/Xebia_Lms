@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Students from './pages/Students';
 import Fees from './pages/Fees';
 import Attendance from './pages/Attendance';
+import Announcements from '@/features/announcements/AnnouncementsPage';
 
 export default function CounsellorLayout() {
   return (
@@ -16,6 +17,7 @@ export default function CounsellorLayout() {
         <Route path="students" element={<Students />} />
         <Route path="fees" element={<Fees />} />
         <Route path="attendance" element={<Attendance />} />
+        <Route path="announcements" element={<Announcements />} />
       </Routes>
     </DashboardLayout>
   );

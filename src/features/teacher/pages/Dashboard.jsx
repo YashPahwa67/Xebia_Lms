@@ -5,6 +5,7 @@ import { useData } from '@/features/data/DataContext';
 import { useSimulatedLoad } from '@/hooks/useSimulatedLoad';
 import { GradientStat } from '@/components/dash/GradientStat';
 import { Panel } from '@/components/dash/Panel';
+import { AnnouncementsPanel } from '@/components/dash/AnnouncementsPanel';
 import { HeroCard } from '@/components/dash/HeroCard';
 import { ChartTooltip } from '@/components/dash/ChartTooltip';
 import { StatSkeleton, ChartSkeleton, ListSkeleton } from '@/components/dash/Skeleton';
@@ -99,6 +100,7 @@ export default function TeacherDashboard() {
           </Reveal>
         )}
       </div>
+      <AnnouncementsPanel />
     </div>
   );
 }

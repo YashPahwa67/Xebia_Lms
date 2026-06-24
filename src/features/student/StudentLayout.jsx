@@ -8,6 +8,7 @@ import SubjectDetail from './pages/SubjectDetail';
 import Assessments from './pages/Assessments';
 import Attendance from './pages/Attendance';
 import Fees from './pages/Fees';
+import Announcements from '@/features/announcements/AnnouncementsPage';
 
 export default function StudentLayout() {
   return (
@@ -20,6 +21,7 @@ export default function StudentLayout() {
         <Route path="assessments" element={<Assessments />} />
         <Route path="attendance" element={<Attendance />} />
         <Route path="fees" element={<Fees />} />
+        <Route path="announcements" element={<Announcements />} />
       </Routes>
     </DashboardLayout>
   );

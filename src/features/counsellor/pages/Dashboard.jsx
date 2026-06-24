@@ -8,6 +8,7 @@ import { useAuth } from '@/features/auth/AuthContext';
 import { useSimulatedLoad } from '@/hooks/useSimulatedLoad';
 import { GradientStat } from '@/components/dash/GradientStat';
 import { Panel } from '@/components/dash/Panel';
+import { AnnouncementsPanel } from '@/components/dash/AnnouncementsPanel';
 import { HeroCard } from '@/components/dash/HeroCard';
 import { ChartTooltip } from '@/components/dash/ChartTooltip';
 import { StatSkeleton, ChartSkeleton } from '@/components/dash/Skeleton';
@@ -102,6 +103,7 @@ export default function CounsellorDashboard() {
           </Reveal>
         )}
       </div>
+      <AnnouncementsPanel />
     </div>
   );
 }
