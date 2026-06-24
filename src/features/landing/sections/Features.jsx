@@ -38,7 +38,7 @@ function FeatureCard({ icon: Icon, title, desc, className = '', tone = 'light' }
 
 export default function Features() {
   return (
-    <section id="features" className="relative shell scroll-mt-20 py-24 sm:py-32">
+    <section id="features" className="relative shell scroll-mt-16 py-24 sm:py-32">
       <div className="mx-auto max-w-2xl text-center">
         <Reveal>
           <span className="eyebrow">The platform</span>

@@ -36,7 +36,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative scroll-mt-20 bg-ink/[0.015] py-24 sm:py-32">
+    <section id="contact" className="relative scroll-mt-16 bg-ink/[0.015] py-24 sm:py-32">
       <div className="shell">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>

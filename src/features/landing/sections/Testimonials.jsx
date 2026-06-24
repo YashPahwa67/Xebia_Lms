@@ -54,7 +54,7 @@ function Row({ items, reverse }) {
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="scroll-mt-20 py-24 sm:py-32">
+    <section id="testimonials" className="scroll-mt-16 py-24 sm:py-32">
       <div className="shell">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>

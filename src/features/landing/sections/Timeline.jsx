@@ -17,7 +17,7 @@ export default function Timeline() {
   const fill = useSpring(scrollYProgress, { stiffness: 80, damping: 26 });
 
   return (
-    <section id="timeline" className="relative scroll-mt-20 bg-ink/[0.015] py-24 sm:py-32">
+    <section id="timeline" className="relative scroll-mt-16 bg-ink/[0.015] py-24 sm:py-32">
       <div className="shell">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal>

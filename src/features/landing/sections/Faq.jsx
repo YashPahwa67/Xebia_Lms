@@ -52,7 +52,7 @@ export default function Faq() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="faq" className="shell scroll-mt-20 py-24 sm:py-32">
+    <section id="faq" className="shell scroll-mt-16 py-24 sm:py-32">
       <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <Reveal>
