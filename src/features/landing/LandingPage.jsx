@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Sparkles, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/features/auth/AuthContext';
 import { ROLE_HOME } from '@/constants';
 import { ScrollProgress } from '@/components/marketing/ScrollProgress';
@@ -48,6 +50,22 @@ export default function LandingPage() {
         <CtaSection />
       </main>
       <Footer />
+
+      {/* Always-visible floating CTA to the public course catalog */}
+      <motion.button
+        onClick={() => navigate('/courses')}
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        whileHover={{ scale: 1.04 }}
+        whileTap={{ scale: 0.97 }}
+        className="group fixed bottom-6 right-6 z-50 inline-flex items-center gap-2 rounded-full bg-plum px-6 py-3.5 text-sm font-semibold text-white shadow-float transition-colors hover:bg-plum-dark"
+        aria-label="Explore courses"
+      >
+        <Sparkles size={16} className="text-white/90" />
+        Explore courses
+        <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+      </motion.button>
     </div>
   );
 }

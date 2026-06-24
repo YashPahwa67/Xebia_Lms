@@ -5,6 +5,9 @@ import { ROLES } from '@/constants';
 import Dashboard from './pages/Dashboard';
 import UsersPage from './pages/Users';
 import Subjects from './pages/Subjects';
+import Finance from './pages/Finance';
+import Attendance from './pages/Attendance';
+import Announcements from './pages/Announcements';
 import Reports from './pages/Reports';
 
 export default function DirectorLayout() {
@@ -15,6 +18,9 @@ export default function DirectorLayout() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="users" element={<UsersPage />} />
         <Route path="subjects" element={<Subjects />} />
+        <Route path="finance" element={<Finance />} />
+        <Route path="attendance" element={<Attendance />} />
+        <Route path="announcements" element={<Announcements />} />
         <Route path="reports" element={<Reports />} />
       </Routes>
     </DashboardLayout>

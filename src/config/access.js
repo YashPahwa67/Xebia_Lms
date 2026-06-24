@@ -1,7 +1,7 @@
 // What each role can see and do. Layouts read `nav` from here and routes are
 // still guarded by ProtectedRoute. Keeping it in one place so it's easy to tweak.
 import {
-  LayoutDashboard, Users, BookOpen, BarChart3, Wallet, CalendarCheck, ClipboardList,
+  LayoutDashboard, Users, BookOpen, BarChart3, Wallet, CalendarCheck, ClipboardList, Banknote, Megaphone,
 } from 'lucide-react';
 
 export const ACCESS = {
@@ -12,9 +12,12 @@ export const ACCESS = {
       { to: '/director/dashboard', label: 'Dashboard', icon: LayoutDashboard },
       { to: '/director/users', label: 'Users', icon: Users },
       { to: '/director/subjects', label: 'Subjects', icon: BookOpen },
+      { to: '/director/finance', label: 'Finance', icon: Banknote },
+      { to: '/director/attendance', label: 'Attendance', icon: CalendarCheck },
+      { to: '/director/announcements', label: 'Announcements', icon: Megaphone },
       { to: '/director/reports', label: 'Reports', icon: BarChart3 },
     ],
-    can: ['viewAllUsers', 'viewAllSubjects', 'viewReports', 'viewFinanceSummary', 'viewAttendanceAll'],
+    can: ['viewAllUsers', 'viewAllSubjects', 'viewReports', 'viewFinance', 'viewAttendanceAll', 'manageAnnouncements'],
   },
 
   Counsellor: {

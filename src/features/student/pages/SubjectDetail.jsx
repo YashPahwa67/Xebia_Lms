@@ -36,7 +36,7 @@ export default function StudentSubjectDetail() {
       <Link to="/student/subjects" className="inline-flex items-center gap-1.5 text-sm text-slate/70 hover:text-plum">
         <ArrowLeft size={16} /> Back to subjects
       </Link>
-      <PageHeader title={subject.name} subtitle={`${subject.code} · ${subject.credits} credits`} />
+      <PageHeader title={subject.name} subtitle={`${subject.code}`} />
 
       <div className="flex flex-wrap items-center gap-4">
         <Badge tone="plum">{subject.code}</Badge>

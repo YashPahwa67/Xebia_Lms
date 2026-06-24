@@ -4,12 +4,14 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { Panel } from '@/components/dash/Panel';
 import { GradientStat } from '@/components/dash/GradientStat';
 import { EmptyState } from '@/components/ui/States';
-import { Wallet, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Button, useToast } from '@/components/ui';
+import { Wallet, CheckCircle2, AlertCircle, CreditCard } from 'lucide-react';
 import { formatDate, inr } from '@/utils/format';
 
 export default function StudentFees() {
   const { user } = useAuth();
-  const { feeFor } = useData();
+  const toast = useToast();
+  const { feeFor, recordPayment } = useData();
   const fee = feeFor(user.id);
 
   if (!fee) return <><PageHeader title="Fees" /><EmptyState title="No fee record" /></>;
@@ -17,9 +19,18 @@ export default function StudentFees() {
   const due = fee.total - fee.paid;
   const pct = Math.round((fee.paid / fee.total) * 100);
 
+  const payNow = () => {
+    recordPayment(user.id, due, 'Card');
+    toast.success(`Payment of ${inr(due)} successful`);
+  };
+
   return (
     <div>
-      <PageHeader title="Fees" subtitle="Your fee summary and payment history" />
+      <PageHeader
+        title="Fees"
+        subtitle="Your fee summary and payment history"
+        actions={due > 0 && <Button onClick={payNow}><CreditCard size={16} /> Pay {inr(due)}</Button>}
+      />
       <div className="grid gap-4 sm:grid-cols-3">
         <GradientStat label="Total fee" value={inr(fee.total)} icon={Wallet} tone="velvet" />
         <GradientStat label="Paid" value={inr(fee.paid)} icon={CheckCircle2} tone="emerald" delay={0.05} />

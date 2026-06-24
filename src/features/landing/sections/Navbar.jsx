@@ -47,15 +47,25 @@ export default function Navbar() {
 
         {/* Centered nav links, independent of side widths */}
         <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 md:flex">
-          {LINKS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="rounded-full px-5 py-2.5 text-base font-medium text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink"
-            >
-              {l.label}
-            </a>
-          ))}
+          {LINKS.map((l) =>
+            l.to ? (
+              <button
+                key={l.label}
+                onClick={() => navigate(l.to)}
+                className="rounded-full px-5 py-2.5 text-base font-medium text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink"
+              >
+                {l.label}
+              </button>
+            ) : (
+              <a
+                key={l.label}
+                href={l.href}
+                className="rounded-full px-5 py-2.5 text-base font-medium text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink"
+              >
+                {l.label}
+              </a>
+            ),
+          )}
         </div>
 
         <div className="flex items-center gap-3">
@@ -92,9 +102,15 @@ export default function Navbar() {
           >
             {LINKS.map((l) => (
               <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
+                key={l.label}
+                href={l.to || l.href}
+                onClick={(e) => {
+                  setOpen(false);
+                  if (l.to) {
+                    e.preventDefault();
+                    navigate(l.to);
+                  }
+                }}
                 className="block rounded-xl px-4 py-3 text-sm font-medium text-ink/80 hover:bg-ink/[0.04]"
               >
                 {l.label}

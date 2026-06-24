@@ -50,7 +50,7 @@ export default function TeacherSubjectDetail() {
       </Link>
       <PageHeader
         title={subject.name}
-        subtitle={`${subject.code} · ${subject.credits} credits`}
+        subtitle={`${subject.code}`}
         actions={owned && <Button className="bg-plum text-white hover:bg-plum-dark" onClick={() => setShow(true)}><Plus size={16} /> Upload notes</Button>}
       />
 

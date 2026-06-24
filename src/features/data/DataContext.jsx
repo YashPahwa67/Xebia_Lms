@@ -32,6 +32,8 @@ export function DataProvider({ children }) {
       teacherSubjects: (teacherId) => db.subjects.filter((s) => s.teacherId === teacherId),
       studentSubjects: (studentId) =>
         (db.enrollments[studentId] || []).map(subjectById).filter(Boolean),
+      availableSubjects: (studentId) =>
+        db.subjects.filter((s) => !(db.enrollments[studentId] || []).includes(s.id)),
       studentsInSubject: (subjectId) =>
         db.users.filter((u) => u.role === 'Student' && (db.enrollments[u.id] || []).includes(subjectId)),
       assessmentsForSubjects: (subjectIds) =>
@@ -61,6 +63,7 @@ export function DataProvider({ children }) {
       students: () => db.users.filter((u) => u.role === 'Student'),
       teachers: () => db.users.filter((u) => u.role === 'Teacher'),
       counsellors: () => db.users.filter((u) => u.role === 'Counsellor'),
+      announcements: () => [...db.announcements].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
     };
   }, [db]);
 
@@ -139,6 +142,45 @@ export function DataProvider({ children }) {
     });
   }, []);
 
+  // Student buys/enrols in a course -> adds it to their courses and bills the price to their fees.
+  const enrollInCourse = useCallback((studentId, subjectId) => {
+    setDb((p) => {
+      const current = p.enrollments[studentId] || [];
+      if (current.includes(subjectId)) return p;
+      const subject = p.subjects.find((s) => s.id === subjectId);
+      const price = subject?.price || 0;
+      const enrollments = { ...p.enrollments, [studentId]: [...current, subjectId] };
+
+      const hasFee = p.fees.some((f) => f.studentId === studentId);
+      const fees = hasFee
+        ? p.fees.map((f) => (f.studentId === studentId ? { ...f, total: f.total + price } : f))
+        : [...p.fees, { studentId, total: price, paid: 0, dueDate: '2026-07-15', payments: [] }];
+
+      const counsellorIds = p.users.filter((u) => u.role === 'Counsellor').map((u) => u.id);
+      const student = p.users.find((u) => u.id === studentId);
+      const notif = makeNotif(counsellorIds, 'fee', `${student?.name?.split(' ')[0] || 'A student'} enrolled in ${subject?.name}`, `₹${price.toLocaleString('en-IN')} added to fees`);
+
+      return { ...p, enrollments, fees, notifications: [notif, ...p.notifications] };
+    });
+  }, []);
+
+  // Director adds a new course/subject and assigns a teacher.
+  const addSubject = useCallback(({ name, code, teacherId, price }) => {
+    const subject = { id: nextId('sub'), name, code, teacherId, price: Number(price) || 0 };
+    setDb((p) => ({ ...p, subjects: [...p.subjects, subject] }));
+    return subject;
+  }, []);
+
+  // Director broadcasts an announcement to a role (or everyone) -> also notifies them.
+  const broadcast = useCallback(({ audience, title, message, from }) => {
+    setDb((p) => {
+      const targets = p.users.filter((u) => audience === 'All' || u.role === audience).map((u) => u.id);
+      const ann = { id: nextId('an'), audience, title, message, from, createdAt: new Date().toISOString() };
+      const notif = makeNotif(targets, 'system', title, message);
+      return { ...p, announcements: [ann, ...p.announcements], notifications: [notif, ...p.notifications] };
+    });
+  }, []);
+
   const markNotifRead = useCallback((id, userId) => {
     setDb((p) => ({
       ...p,
@@ -154,8 +196,8 @@ export function DataProvider({ children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ db, ...selectors, createAssessment, submitAssessment, saveAttendance, recordPayment, addNote, removeNote, markNotifRead, markAllNotifRead }),
-    [db, selectors, createAssessment, submitAssessment, saveAttendance, recordPayment, addNote, removeNote, markNotifRead, markAllNotifRead],
+    () => ({ db, ...selectors, createAssessment, submitAssessment, saveAttendance, recordPayment, addNote, removeNote, addSubject, enrollInCourse, broadcast, markNotifRead, markAllNotifRead }),
+    [db, selectors, createAssessment, submitAssessment, saveAttendance, recordPayment, addNote, removeNote, addSubject, enrollInCourse, broadcast, markNotifRead, markAllNotifRead],
   );
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

@@ -6,6 +6,7 @@ import { FullScreenLoader } from '@/components/ui/Spinner';
 import { UnauthorizedPage, NotFoundPage } from '@/features/misc/ErrorPages';
 
 const LandingPage = lazy(() => import('@/features/landing/LandingPage'));
+const CoursesPage = lazy(() => import('@/features/catalog/CoursesPage'));
 const Login = lazy(() => import('@/features/auth/pages/Login'));
 const RoleLogin = lazy(() => import('@/features/auth/pages/RoleLogin'));
 const ForgotPassword = lazy(() => import('@/features/auth/pages/ForgotPassword'));
@@ -22,6 +23,7 @@ export default function App() {
     <Suspense fallback={<FullScreenLoader />}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/courses" element={<CoursesPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/login/:role" element={<RoleLogin />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

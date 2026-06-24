@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Mail, Lock, Building2, LayoutDashboard, Wallet, GraduationCap, Users } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Mail, Lock, LayoutDashboard, Wallet, GraduationCap, Users } from 'lucide-react';
 import { useAuth } from '@/features/auth/AuthContext';
+import { useData } from '@/features/data/DataContext';
+import { useToast } from '@/components/ui';
 import { ROLES, ROLE_HOME } from '@/constants';
 import { users as seedUsers, CURRENT } from '@/data/seed';
 import { MeshBlobs, GridOverlay } from '@/components/marketing/Backdrops';
@@ -15,22 +17,18 @@ const META = {
   [ROLES.STUDENT]: { icon: Users, tagline: 'Subjects, assessments, attendance & fees' },
 };
 
-const INSTITUTIONS = [
-  'Xebia Institute of Technology',
-  'Greenfield University',
-  'Northgate Polytechnic',
-];
-
 export default function RoleLogin() {
   const { role } = useParams();
   const navigate = useNavigate();
   const { loginAs, isAuthenticated, role: authRole } = useAuth();
+  const { studentSubjects } = useData();
+  const toast = useToast();
 
   const valid = Object.values(ROLES).includes(role);
   const meta = META[role];
   const demoEmail = valid ? seedUsers.find((u) => u.id === CURRENT[role])?.email : '';
 
-  const [form, setForm] = useState({ institution: INSTITUTIONS[0], email: demoEmail, password: 'demo1234' });
+  const [form, setForm] = useState({ email: demoEmail, password: 'demo1234' });
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -50,7 +48,13 @@ export default function RoleLogin() {
     setSubmitting(true);
     // Demo auth: accept any credentials and enter the chosen role's workspace.
     setTimeout(() => {
-      const { role: chosen } = loginAs(role);
+      const { user, role: chosen } = loginAs(role);
+      // A student account only exists once they've bought a course.
+      if (chosen === ROLES.STUDENT && studentSubjects(user.id).length === 0) {
+        toast.error('Enrol in a course to activate your account');
+        navigate('/courses', { replace: true });
+        return;
+      }
       navigate(ROLE_HOME[chosen], { replace: true });
     }, 450);
   };
@@ -68,8 +72,8 @@ export default function RoleLogin() {
           <img src={xebiaLogo} alt="Xebia" className="h-32 w-auto object-contain brightness-0 invert" />
         </Link>
         <div className="relative">
-          <h1 className="font-display text-4xl font-semibold leading-tight">The OS for<br />modern institutions.</h1>
-          <p className="mt-4 max-w-sm text-white/70">A secure, multi-tenant platform powering universities & institutes — one login per role.</p>
+          <h1 className="font-display text-4xl font-semibold leading-tight">Learn. Teach.<br />Grow with Xebia.</h1>
+          <p className="mt-4 max-w-sm text-white/70">Xebia&apos;s learning academy — courses built by Xebia, taught by our trainers, and tracked end to end.</p>
         </div>
         <p className="relative text-xs text-white/50">© {new Date().getFullYear()} Xebia LMS</p>
       </div>
@@ -96,16 +100,6 @@ export default function RoleLogin() {
 
           <form onSubmit={onSubmit} className="mt-7 space-y-4">
             <label className="block">
-              <span className="mb-1.5 block text-sm font-medium text-ink/70">Institution</span>
-              <div className="relative">
-                <Building2 size={16} className="pointer-events-none absolute left-3.5 top-3 text-slate/40" />
-                <select value={form.institution} onChange={set('institution')} className="w-full rounded-xl border border-line bg-white py-2.5 pl-10 pr-4 text-sm text-ink focus:border-plum focus:outline-none focus:ring-2 focus:ring-plum/15">
-                  {INSTITUTIONS.map((i) => <option key={i}>{i}</option>)}
-                </select>
-              </div>
-            </label>
-
-            <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-ink/70">Email</span>
               <div className="relative">
                 <Mail size={16} className="pointer-events-none absolute left-3.5 top-3 text-slate/40" />
@@ -129,6 +123,12 @@ export default function RoleLogin() {
           <p className="mt-5 rounded-xl border border-line/70 bg-paper px-4 py-2.5 text-center text-xs text-slate/65">
             Demo credentials are pre-filled — just click <span className="font-medium text-plum">Sign in</span>.
           </p>
+
+          {role === ROLES.STUDENT && (
+            <p className="mt-4 text-center text-sm text-slate/70">
+              New here? <Link to="/courses" className="font-medium text-plum hover:underline">Browse &amp; buy a course</Link> to get started.
+            </p>
+          )}
         </div>
       </div>
     </div>

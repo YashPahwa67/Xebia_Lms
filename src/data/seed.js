@@ -24,10 +24,12 @@ export const users = [
 ];
 
 export const subjects = [
-  { id: 'sub1', name: 'Data Structures', code: 'CS201', teacherId: 't1', credits: 4 },
-  { id: 'sub2', name: 'Operating Systems', code: 'CS202', teacherId: 't1', credits: 4 },
-  { id: 'sub3', name: 'Database Systems', code: 'CS203', teacherId: 't2', credits: 3 },
-  { id: 'sub4', name: 'Computer Networks', code: 'CS204', teacherId: 't3', credits: 3 },
+  { id: 'sub1', name: 'Data Structures', code: 'CS201', teacherId: 't1', price: 35000 },
+  { id: 'sub2', name: 'Operating Systems', code: 'CS202', teacherId: 't1', price: 30000 },
+  { id: 'sub3', name: 'Database Systems', code: 'CS203', teacherId: 't2', price: 28000 },
+  { id: 'sub4', name: 'Computer Networks', code: 'CS204', teacherId: 't3', price: 25000 },
+  { id: 'sub5', name: 'Machine Learning', code: 'CS205', teacherId: 't2', price: 42000 },
+  { id: 'sub6', name: 'Cloud Computing', code: 'CS206', teacherId: 't3', price: 38000 },
 ];
 
 // student -> enrolled subject ids
@@ -87,6 +89,12 @@ export const notifications = [
   { id: 'no5', userIds: ['d1'], type: 'system', title: 'Monthly report ready', meta: 'June enrolment up 12%', createdAt: '2026-06-22T08:00', readBy: [] },
 ];
 
+// Announcements broadcast by the director to a role (or everyone).
+export const announcements = [
+  { id: 'an1', title: 'Term break schedule', message: 'Classes pause 1–5 July for the mid-term break.', audience: 'All', from: 'Dr. Anita Rao', createdAt: '2026-06-20T09:00' },
+  { id: 'an2', title: 'Faculty review meeting', message: 'All trainers, please submit assessment reports by Friday.', audience: 'Teacher', from: 'Dr. Anita Rao', createdAt: '2026-06-18T11:00' },
+];
+
 // Deep clone so session mutations never corrupt the seed module.
 export const cloneSeed = () => ({
   users: structuredClone(users),
@@ -98,4 +106,5 @@ export const cloneSeed = () => ({
   fees: structuredClone(fees),
   notes: structuredClone(notes),
   notifications: structuredClone(notifications),
+  announcements: structuredClone(announcements),
 });
