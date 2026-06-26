@@ -3,8 +3,6 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Mail, Lock, LayoutDashboard, Wallet, GraduationCap, Users } from 'lucide-react';
 import { useAuth } from '@/features/auth/AuthContext';
-import { useData } from '@/features/data/DataContext';
-import { useToast } from '@/components/ui';
 import { ROLES, ROLE_HOME } from '@/constants';
 import { users as seedUsers, CURRENT } from '@/data/seed';
 import { MeshBlobs, GridOverlay } from '@/components/marketing/Backdrops';
@@ -21,8 +19,6 @@ export default function RoleLogin() {
   const { role } = useParams();
   const navigate = useNavigate();
   const { loginAs, isAuthenticated, role: authRole } = useAuth();
-  const { studentSubjects } = useData();
-  const toast = useToast();
 
   const valid = Object.values(ROLES).includes(role);
   const meta = META[role];
@@ -48,13 +44,7 @@ export default function RoleLogin() {
     setSubmitting(true);
     // Demo auth: accept any credentials and enter the chosen role's workspace.
     setTimeout(() => {
-      const { user, role: chosen } = loginAs(role);
-      // A student account only exists once they've bought a course.
-      if (chosen === ROLES.STUDENT && studentSubjects(user.id).length === 0) {
-        toast.error('Enrol in a course to activate your account');
-        navigate('/courses', { replace: true });
-        return;
-      }
+      const { role: chosen } = loginAs(role);
       navigate(ROLE_HOME[chosen], { replace: true });
     }, 450);
   };
@@ -123,12 +113,6 @@ export default function RoleLogin() {
           <p className="mt-5 rounded-xl border border-line/70 bg-paper px-4 py-2.5 text-center text-xs text-slate/65">
             Demo credentials are pre-filled — just click <span className="font-medium text-plum">Sign in</span>.
           </p>
-
-          {role === ROLES.STUDENT && (
-            <p className="mt-4 text-center text-sm text-slate/70">
-              New here? <Link to="/courses" className="font-medium text-plum hover:underline">Browse &amp; buy a course</Link> to get started.
-            </p>
-          )}
         </div>
       </div>
     </div>

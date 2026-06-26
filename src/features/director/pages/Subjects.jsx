@@ -6,10 +6,9 @@ import { Panel } from '@/components/dash/Panel';
 import { SortableTable } from '@/components/dash/SortableTable';
 import { Badge } from '@/components/ui/Card';
 import { Modal, Button, Input, Select, useToast } from '@/components/ui';
-import { inr } from '@/utils/format';
 
 function AddCourseModal({ teachers, onClose, onCreate }) {
-  const [f, setF] = useState({ name: '', code: '', price: 30000, teacherId: teachers[0]?.id || '' });
+  const [f, setF] = useState({ name: '', code: '', teacherId: teachers[0]?.id || '' });
   const set = (k) => (e) => setF((p) => ({ ...p, [k]: e.target.value }));
   return (
     <Modal
@@ -20,10 +19,7 @@ function AddCourseModal({ teachers, onClose, onCreate }) {
     >
       <div className="space-y-4">
         <Input label="Course name" value={f.name} onChange={set('name')} placeholder="e.g. Machine Learning" />
-        <div className="grid grid-cols-2 gap-3">
-          <Input label="Code" value={f.code} onChange={set('code')} placeholder="CS205" />
-          <Input label="Price (₹)" type="number" min="0" step="1000" value={f.price} onChange={set('price')} />
-        </div>
+        <Input label="Code" value={f.code} onChange={set('code')} placeholder="CS205" />
         <Select label="Assign teacher" value={f.teacherId} onChange={set('teacherId')}>
           {teachers.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
         </Select>
@@ -41,7 +37,6 @@ export default function DirectorSubjects() {
     { key: 'code', header: 'Code', render: (s) => <Badge tone="plum">{s.code}</Badge> },
     { key: 'name', header: 'Course', render: (s) => <span className="font-medium text-ink">{s.name}</span> },
     { key: 'teacher', header: 'Faculty', sortValue: (s) => userById(s.teacherId)?.name, render: (s) => userById(s.teacherId)?.name },
-    { key: 'price', header: 'Price', align: 'right', sortValue: (s) => s.price, render: (s) => inr(s.price) },
     { key: 'enrolled', header: 'Enrolled', align: 'right', sortValue: (s) => studentsInSubject(s.id).length, render: (s) => studentsInSubject(s.id).length },
   ];
 

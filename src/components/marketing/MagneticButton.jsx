@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 
-// Button/link that subtly follows the cursor (magnetic) with a spring.
+// Button/link that gently follows the cursor with a spring.
 export function MagneticButton({ as = 'button', strength = 0.4, className, children, ...props }) {
   const reduce = useReducedMotion();
   const ref = useRef(null);
@@ -23,15 +23,7 @@ export function MagneticButton({ as = 'button', strength = 0.4, className, child
 
   const Comp = motion[as] || motion.button;
   return (
-    <Comp
-      ref={ref}
-      style={{ x, y }}
-      onPointerMove={onMove}
-      onPointerLeave={reset}
-      whileTap={{ scale: 0.96 }}
-      className={className}
-      {...props}
-    >
+    <Comp ref={ref} style={{ x, y }} onPointerMove={onMove} onPointerLeave={reset} whileTap={{ scale: 0.96 }} className={className} {...props}>
       {children}
     </Comp>
   );

@@ -84,10 +84,6 @@ export default function Login() {
               </motion.button>
             ))}
           </div>
-
-          <p className="mt-8 text-center text-sm text-slate/70">
-            <Link to="/" className="font-medium text-plum hover:underline">← Back to home</Link>
-          </p>
         </div>
       </div>
     </div>
