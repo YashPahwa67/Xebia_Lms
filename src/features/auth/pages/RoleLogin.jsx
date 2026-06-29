@@ -7,6 +7,7 @@ import { ROLES, ROLE_HOME } from '@/constants';
 import { users as seedUsers, CURRENT } from '@/data/seed';
 import { MeshBlobs, GridOverlay } from '@/components/marketing/Backdrops';
 import xebiaLogo from '@/assets/landing/logo.png';
+import heroArt from '@/assets/landing/hero-illustration.svg';
 
 const META = {
   [ROLES.DIRECTOR]: { icon: LayoutDashboard, tagline: 'Institution-wide analytics, users & reports' },
@@ -62,6 +63,17 @@ export default function RoleLogin() {
           <img src={xebiaLogo} alt="Xebia" className="h-32 w-auto object-contain brightness-0 invert" />
         </Link>
         <div className="relative">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-8 rounded-3xl border border-white/15 bg-white/10 p-3 shadow-float backdrop-blur"
+          >
+            <motion.img
+              src={heroArt} alt="Xebia LMS dashboard preview"
+              className="w-full"
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </motion.div>
           <h1 className="font-display text-4xl font-semibold leading-tight">Learn. Teach.<br />Grow with Xebia.</h1>
           <p className="mt-4 max-w-sm text-white/70">Xebia&apos;s learning academy — courses built by Xebia, taught by our trainers, and tracked end to end.</p>
         </div>

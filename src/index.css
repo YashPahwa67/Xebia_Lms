@@ -31,18 +31,19 @@
   }
   .eyebrow {
     @apply inline-flex items-center gap-2 rounded-full border border-plum/15 bg-plum/[0.04]
-           px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-plum;
+           px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-plum
+           dark:border-white/15 dark:bg-white/[0.06] dark:text-mist;
   }
   .display-1 {
-    @apply font-display font-semibold tracking-tightest text-ink
+    @apply font-display font-semibold tracking-tightest text-ink dark:text-white
            text-[clamp(2.6rem,6.2vw,5.25rem)] leading-[0.98];
   }
   .display-2 {
-    @apply font-display font-semibold tracking-tightest text-ink
+    @apply font-display font-semibold tracking-tightest text-ink dark:text-white
            text-[clamp(2rem,4.4vw,3.4rem)] leading-[1.04];
   }
   .lede {
-    @apply text-[clamp(1.05rem,1.5vw,1.25rem)] leading-relaxed text-ink/60;
+    @apply text-[clamp(1.05rem,1.5vw,1.25rem)] leading-relaxed text-ink/60 dark:text-white/55;
   }
   .text-gradient {
     @apply bg-gradient-to-br from-magenta via-plum to-plum-dark bg-clip-text text-transparent;
@@ -55,13 +56,13 @@
     @apply btn bg-plum px-6 py-3 text-white hover:bg-plum-dark;
   }
   .btn-ghost {
-    @apply btn px-6 py-3 text-ink hover:text-plum;
+    @apply btn px-6 py-3 text-ink hover:text-plum dark:text-white/80 dark:hover:text-white;
   }
   .glass {
-    @apply border border-white/60 bg-white/70 backdrop-blur-xl;
+    @apply border border-white/60 bg-white/70 backdrop-blur-xl dark:border-white/10 dark:bg-white/10;
   }
   .card-surface {
-    @apply rounded-3xl border border-ink/[0.07] bg-white;
+    @apply rounded-3xl border border-ink/[0.07] bg-white dark:border-white/10 dark:bg-white/[0.04];
     box-shadow: 0 1px 0 0 rgba(10, 10, 11, 0.04);
   }
 }

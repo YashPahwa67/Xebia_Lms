@@ -4,9 +4,11 @@ import { motion, useScroll, useMotionValueEvent, useReducedMotion } from 'framer
 import {
   GraduationCap, ArrowRight, LayoutDashboard, BookOpen, ClipboardList, CalendarCheck,
   Megaphone, Wallet, ShieldCheck, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Send, Sparkles,
+  Moon, Sun,
 } from 'lucide-react';
 import { useAuth } from '@/features/auth/AuthContext';
 import { ROLE_HOME } from '@/constants';
+import { useTheme } from '@/hooks/useTheme';
 import { Reveal } from '@/components/marketing/Reveal';
 import { Counter } from '@/components/marketing/Counter';
 import { MeshBlobs, GridOverlay, Noise } from '@/components/marketing/Backdrops';
@@ -15,6 +17,7 @@ import { MagneticButton } from '@/components/marketing/MagneticButton';
 import { TiltCard } from '@/components/marketing/TiltCard';
 import { useToast } from '@/components/ui';
 import xebiaLogo from '@/assets/landing/logo.png';
+import heroArt from '@/assets/landing/hero-illustration.svg';
 
 const STATS = [
   { value: 4, suffix: '', label: 'Role workspaces' },
@@ -24,7 +27,7 @@ const STATS = [
 
 const NAV = [{ label: 'Features', href: '#features' }, { label: 'Contact', href: '#contact' }];
 
-function Navbar({ navigate }) {
+function Navbar({ navigate, dark, toggle }) {
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, 'change', (y) => setScrolled(y > 16));
@@ -35,73 +38,43 @@ function Navbar({ navigate }) {
     >
       <nav className={`flex w-full max-w-container items-center justify-between rounded-full px-4 py-2 transition-all duration-500 ${scrolled ? 'glass shadow-float' : 'bg-transparent'}`}>
         <Link to="/" aria-label="Xebia home" className="flex items-center">
-          <img src={xebiaLogo} alt="Xebia" className="-my-3 h-16 w-auto object-contain" />
+          <img src={xebiaLogo} alt="Xebia" className={`-my-4 h-24 w-auto object-contain ${dark ? 'brightness-0 invert' : ''}`} />
         </Link>
         <div className="hidden items-center gap-1 sm:flex">
           {NAV.map((l) => (
-            <a key={l.href} href={l.href} className="rounded-full px-4 py-2 text-sm font-medium text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink">{l.label}</a>
+            <a key={l.href} href={l.href} className="rounded-full px-4 py-2 text-sm font-medium text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white">{l.label}</a>
           ))}
         </div>
-        <MagneticButton onClick={() => navigate('/login')} className="btn-primary px-5 py-2.5 shadow-glow">Sign in</MagneticButton>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggle}
+            aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'}
+            className="grid h-10 w-10 place-items-center rounded-full border border-line text-slate transition-colors hover:border-plum hover:text-plum dark:border-white/15 dark:text-white/80 dark:hover:border-teal dark:hover:text-teal"
+          >
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          <MagneticButton onClick={() => navigate('/login')} className="btn-primary px-5 py-2.5 shadow-glow">Sign in</MagneticButton>
+        </div>
       </nav>
     </motion.header>
   );
 }
 
-// Floating glassy product preview — a stylised mini dashboard.
-function AppPreview() {
+// Floating hero illustration.
+function HeroVisual() {
   const reduce = useReducedMotion();
-  const bars = [62, 84, 48, 92, 70, 56];
   return (
-    <div className="relative mx-auto mt-16 w-full max-w-4xl">
-      <div aria-hidden="true" className="absolute -inset-x-10 -top-10 bottom-0 -z-10 rounded-[3rem] bg-gradient-to-b from-plum/15 via-magenta/10 to-transparent blur-3xl" />
-      <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
-        <TiltCard max={5}>
-          <div className="overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/90 shadow-float backdrop-blur">
-            <div className="flex items-center gap-1.5 border-b border-line/60 px-5 py-3">
-              <span className="h-2.5 w-2.5 rounded-full bg-cta/60" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#FFC107]/70" />
-              <span className="h-2.5 w-2.5 rounded-full bg-teal/60" />
-              <span className="ml-3 h-4 w-40 rounded-full bg-mist/50" />
-            </div>
-            <div className="flex">
-              <aside className="hidden w-44 shrink-0 bg-plum-gradient p-4 sm:block">
-                <div className="flex items-center gap-2 text-white">
-                  <span className="grid h-8 w-8 place-items-center rounded-lg bg-white/15"><GraduationCap size={16} /></span>
-                  <span className="text-sm font-semibold">Xebia</span>
-                </div>
-                <div className="mt-5 space-y-2">
-                  <div className="h-8 rounded-lg bg-white/90" />
-                  {[1, 2, 3, 4].map((i) => <div key={i} className="h-8 rounded-lg bg-white/10" />)}
-                </div>
-              </aside>
-              <div className="flex-1 p-5">
-                <div className="grid grid-cols-3 gap-3">
-                  {['from-magenta to-plum', 'from-plum to-plum-dark', 'from-teal to-teal-soft'].map((g, i) => (
-                    <div key={i} className={`rounded-2xl bg-gradient-to-br ${g} p-3 text-white`}>
-                      <div className="h-2 w-10 rounded-full bg-white/40" />
-                      <div className="mt-2 h-5 w-12 rounded bg-white/80" />
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 rounded-2xl border border-line/60 p-4">
-                  <div className="h-3 w-28 rounded-full bg-mist/60" />
-                  <div className="mt-4 flex h-28 items-end gap-2.5">
-                    {bars.map((h, i) => (
-                      <motion.div
-                        key={i}
-                        className="flex-1 rounded-t-md bg-gradient-to-t from-plum to-magenta"
-                        initial={{ height: 0 }}
-                        whileInView={{ height: `${h}%` }}
-                        viewport={{ once: true }}
-                        transition={reduce ? { duration: 0 } : { duration: 0.7, delay: 0.8 + i * 0.08, ease: 'easeOut' }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div className="relative mx-auto mt-14 w-full max-w-3xl">
+      <div aria-hidden="true" className="absolute inset-x-0 -top-6 bottom-0 -z-10 rounded-[3rem] bg-gradient-to-b from-plum/15 via-magenta/10 to-transparent blur-3xl" />
+      <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
+        <TiltCard max={6}>
+          <motion.div
+            animate={reduce ? undefined : { y: [0, -10, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/70 p-4 shadow-float backdrop-blur dark:border-white/10 dark:bg-white/[0.04]"
+          >
+            <img src={heroArt} alt="Xebia LMS dashboard preview" className="w-full" />
+          </motion.div>
         </TiltCard>
       </motion.div>
     </div>
@@ -114,8 +87,8 @@ function FeatureCard({ icon: Icon, title, desc, dark, className = '' }) {
       <article className={`relative flex h-full flex-col overflow-hidden rounded-3xl p-6 ${dark ? 'bg-plum-gradient text-white' : 'card-surface'}`}>
         {dark && <div aria-hidden="true" className="absolute -right-8 -top-10 h-36 w-36 rounded-full bg-teal/30 blur-3xl" />}
         <span className={`grid h-12 w-12 place-items-center rounded-2xl ${dark ? 'bg-white/15 text-white' : 'bg-plum/[0.07] text-plum'}`}><Icon size={22} /></span>
-        <h3 className={`mt-5 font-display text-lg font-semibold ${dark ? 'text-white' : 'text-ink'}`}>{title}</h3>
-        <p className={`mt-1.5 text-sm leading-relaxed ${dark ? 'text-white/75' : 'text-slate/70'}`}>{desc}</p>
+        <h3 className={`mt-5 font-display text-lg font-semibold ${dark ? 'text-white' : 'text-ink dark:text-white'}`}>{title}</h3>
+        <p className={`mt-1.5 text-sm leading-relaxed ${dark ? 'text-white/75' : 'text-slate/70 dark:text-white/70'}`}>{desc}</p>
       </article>
     </TiltCard>
   );
@@ -124,6 +97,7 @@ function FeatureCard({ icon: Icon, title, desc, dark, className = '' }) {
 export default function LandingPage() {
   const navigate = useNavigate();
   const reduce = useReducedMotion();
+  const { dark, toggle } = useTheme();
   const { isAuthenticated, role } = useAuth();
 
   useEffect(() => {
@@ -131,13 +105,13 @@ export default function LandingPage() {
   }, [isAuthenticated, role, navigate]);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-white">
+    <div className={`relative min-h-screen overflow-x-hidden transition-colors duration-500 ${dark ? 'dark bg-plum-deep text-white' : 'bg-white text-ink'}`}>
       <ScrollProgress />
       <Noise />
-      <Navbar navigate={navigate} />
+      <Navbar navigate={navigate} dark={dark} toggle={toggle} />
 
       {/* Hero */}
-      <section className="relative isolate overflow-hidden bg-gradient-to-b from-plum/[0.04] via-white to-white pt-28">
+      <section className="relative isolate overflow-hidden bg-gradient-to-b from-plum/[0.04] via-white to-white pt-28 dark:from-plum/25 dark:via-plum-deep dark:to-plum-deep">
         <MeshBlobs />
         <GridOverlay />
         <div className="shell relative pb-8 text-center">
@@ -159,18 +133,18 @@ export default function LandingPage() {
             <a href="#features" className="btn-ghost px-6 py-3.5 text-base">Explore features</a>
           </motion.div>
 
-          <AppPreview />
+          <HeroVisual />
         </div>
       </section>
 
       {/* Stats */}
       <section className="shell py-14">
-        <div className="grid gap-px overflow-hidden rounded-3xl border border-line/70 bg-line/60 sm:grid-cols-3">
+        <div className="grid gap-px overflow-hidden rounded-3xl border border-line/70 bg-line/60 dark:border-white/10 dark:bg-white/10 sm:grid-cols-3">
           {STATS.map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.08} className="bg-white">
+            <Reveal key={s.label} delay={i * 0.08} className="bg-white dark:bg-plum-deep">
               <div className="flex flex-col items-center gap-1 px-6 py-10 text-center">
                 <span className="font-display text-4xl font-bold tracking-tightest text-gradient"><Counter value={s.value} suffix={s.suffix} /></span>
-                <span className="text-sm font-medium text-slate/60">{s.label}</span>
+                <span className="text-sm font-medium text-slate/60 dark:text-white/60">{s.label}</span>
               </div>
             </Reveal>
           ))}
@@ -209,10 +183,10 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-line/70">
+      <footer className="border-t border-line/70 dark:border-white/10">
         <div className="shell flex flex-col items-center justify-between gap-3 py-6 sm:flex-row">
           <img src={xebiaLogo} alt="Xebia" className="-my-2 h-12 w-auto object-contain" />
-          <p className="text-sm text-slate/55">© {new Date().getFullYear()} Xebia LMS. All rights reserved.</p>
+          <p className="text-sm text-slate/55 dark:text-white/55">© {new Date().getFullYear()} Xebia LMS. All rights reserved.</p>
         </div>
       </footer>
     </div>
@@ -232,7 +206,7 @@ const DETAILS = [
   { icon: MapPin, label: 'Visit us', value: 'Somewhere in the world' },
 ];
 const EMPTY = { firstName: '', lastName: '', email: '', phone: '', subject: '', message: '' };
-const inputCls = 'w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-ink placeholder-slate/35 transition-all focus:border-plum focus:outline-none focus:ring-2 focus:ring-plum/15';
+const inputCls = 'w-full rounded-xl border border-line bg-white px-4 py-3 text-sm text-ink placeholder-slate/35 transition-all focus:border-plum focus:outline-none focus:ring-2 focus:ring-plum/15 dark:border-white/12 dark:bg-white/[0.04] dark:text-white dark:placeholder-white/30';
 
 function Contact() {
   const toast = useToast();
@@ -241,7 +215,7 @@ function Contact() {
   const onSubmit = (e) => { e.preventDefault(); toast.success("Thanks! We'll get back to you shortly."); setForm(EMPTY); };
 
   return (
-    <section id="contact" className="relative scroll-mt-20 overflow-hidden bg-paper py-20">
+    <section id="contact" className="relative scroll-mt-20 overflow-hidden bg-paper py-20 dark:bg-white/[0.02]">
       <div className="shell">
         <div className="mx-auto max-w-2xl text-center">
           <Reveal><span className="eyebrow">Get in touch</span></Reveal>
@@ -254,13 +228,13 @@ function Contact() {
               <div className="grid gap-5 sm:grid-cols-2">
                 {FIELDS.map((f) => (
                   <div key={f.name} className={f.half ? '' : 'sm:col-span-2'}>
-                    <label htmlFor={f.name} className="mb-1.5 block text-sm font-medium text-ink/70">{f.label}</label>
+                    <label htmlFor={f.name} className="mb-1.5 block text-sm font-medium text-ink/70 dark:text-white/70">{f.label}</label>
                     <input id={f.name} type={f.type} value={form[f.name]} onChange={set(f.name)} placeholder={f.label} className={inputCls} required={f.name !== 'phone'} />
                   </div>
                 ))}
               </div>
               <div>
-                <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-ink/70">Message</label>
+                <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-ink/70 dark:text-white/70">Message</label>
                 <textarea id="message" rows={4} required value={form.message} onChange={set('message')} placeholder="How can we help?" className={`${inputCls} resize-y`} />
               </div>
               <MagneticButton type="submit" className="btn bg-teal px-6 py-3.5 text-base text-white hover:bg-teal-soft">Send message <Send size={16} /></MagneticButton>
@@ -284,10 +258,10 @@ function Contact() {
               </ul>
             </div>
             <div className="card-surface flex items-center justify-between p-5">
-              <span className="text-sm font-medium text-slate/70">Follow along</span>
+              <span className="text-sm font-medium text-slate/70 dark:text-white/70">Follow along</span>
               <div className="flex gap-2">
                 {[Facebook, Twitter, Linkedin].map((Icon, i) => (
-                  <a key={i} href="#" aria-label="Social profile" className="grid h-10 w-10 place-items-center rounded-full border border-line text-slate/55 transition-all hover:-translate-y-0.5 hover:border-plum hover:bg-plum hover:text-white"><Icon size={16} /></a>
+                  <a key={i} href="#" aria-label="Social profile" className="grid h-10 w-10 place-items-center rounded-full border border-line text-slate/55 transition-all dark:border-white/15 dark:text-white/65 hover:-translate-y-0.5 hover:border-plum hover:bg-plum hover:text-white"><Icon size={16} /></a>
                 ))}
               </div>
             </div>
